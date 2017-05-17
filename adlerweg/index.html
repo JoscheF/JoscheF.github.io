@@ -82,7 +82,21 @@
 
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
+		//Etappe laden
 		L.geoJSON(window.etappe15).addTo(map);
+		
+		var huts = [
+			L.marker([47.30805, 11.28811], { title: "Solsteinhaus", icon: L.icon( {iconUrl: 'icons/hut.png'} )} ),
+			L.marker([47.33112, 11.26743], { title: "Eppzirleralm", icon: L.icon( {iconUrl: 'icons/hut.png'} )} )
+		
+		];
+		
+		var hutsLayer = L.featureGroup();
+		for (var i=0; i<huts.length; i++) {
+			hutsLayer.addLayer(huts[i]);
+		}
+		hutsLayer.addTo(map);
+		
     </script>
 
 </body>
