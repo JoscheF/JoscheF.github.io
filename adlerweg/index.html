@@ -21,13 +21,14 @@
             margin: 0px;
         }
         html, body, #map {
-            height: 100vh;
-            width: 100vw;
+            height: 600px;
+            width: 1024px;
         }
     </style>
 </head>
 
 <body>
+	<h3>Adlerweg-Etappe 15: Solsteinhaus – Leutasch</h3>
     <div id="map"></div>
 
     <script>
@@ -73,6 +74,42 @@
             imperial: false
         }).addTo(map);
 
+		 // Höhenprofil control hinzufügen
+        var profileControl = L.control.elevation({
+            position : 'bottomleft',
+            theme : 'steelblue-theme'
+        });
+        profileControl.addTo(map);
+
+        // GPX Track laden
+        gpxTrack = omnivore.gpx('gpx/AdlerwegEtappe15.gpx').addTo(map);
+		
+        // nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
+        gpxTrack.on('ready', function () {
+            // Popup hinzufügen
+            var markup = '<h3>Adlerweg-Etappe 15: Solsteinhaus – Leutasch</h3>';
+            markup += '<p>Mitten durchs Karwendel führt diese Etappe und verläuft über die Eppzirler Scharte in das Leutaschtal und weiter zu den 24 Weilern der Gemeinde Leutasch. Dabei werden Almgebiete, Mischwälder und die Gießenbachklamm durchquert.</p>'
+            markup += '<li>Ausgangspunkt: Solsteinhaus</li>';
+            markup += '<li>Endpunkt: Leutasch/Ahrn</li>';
+            markup += '<li>Höhenmeter bergauf: 870</li>';
+            markup += '<li>Höhenmeter bergab: 1530</li>';
+            markup += '<li>Höchster Punkt: 2110</li>';
+            markup += '<li>Schwierigkeitsgrad: mittelschwierig</li>';
+            markup += '<li>Streckenlänge (in km): 20</li>';
+            markup += '<li>Gehzeit (in Stunden): 6,5</li>';
+            markup += '<li>Einkehrmöglichkeiten: Solsteinhaus, Eppzirleralm</li>';
+            markup += '<li><a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-15-solsteinhaus-leutasch">Weitere Informationen</a></li>';
+            gpxTrack.bindPopup(markup, { maxWidth : 450 });
+
+            // Ausschnitt setzen
+            map.fitBounds(gpxTrack.getBounds());
+
+            // Höhenprofil erzeugen
+            gpxTrack.eachLayer(function(layer) {
+                profileControl.addData(layer.feature);
+            });
+        });
+
         // WMTS-Layer Auswahl hinzufügen
         var layerControl = L.control.layers({
             "basemap.at - STANDARD": layers.geolandbasemap,
@@ -86,14 +123,7 @@
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		
-		//Etappe laden und umwandeln in geoJSON
-		omnivore.gpx('data/AdlerwegEtappe15.gpx').addTo(map);
-		var el = L.control.elevation();
-		el.addTo(map);
-		
-		//L.geoJSON(window.etappe15, {
-			// onEachFeature: el.addData.bind(el)
-		//}).addTo(map);
+
 		var huts = [
 			L.marker([47.30805, 11.28811], { title: "Solsteinhaus", icon: L.icon( {iconUrl: 'icons/hut.png'} )} ),
 			L.marker([47.33112, 11.26743], { title: "Eppzirleralm", icon: L.icon( {iconUrl: 'icons/hut.png'} )} )
