@@ -114,19 +114,6 @@
                 profileControl.addData(layer.feature);
             });
         });
-
-        // WMTS-Layer Auswahl hinzufügen
-        var layerControl = L.control.layers({
-            "basemap.at - STANDARD": layers.geolandbasemap,
-            "basemap.at - GRAU": layers.bmapgrau,
-            "basemap.at - OVERLAY": layers.bmapoverlay,
-            "basemap.at - HIGH-DPI": layers.bmaphidpi,
-            "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
-            "OpenStreetMap": layers.osm,
-			 },{
-            "Adlerweg Etappe 15" : gpxTrack
-        }).addTo(map);
-
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		
@@ -151,7 +138,20 @@
 			iconUrl: 'icons/finish.png',
 			iconAnchor: [16, 37]
 		});
-		L.marker([47.36996990, 11.14378990], { title: "Ziel Etappe 15", icon: end}).addTo(map);		
+		L.marker([47.36996990, 11.14378990], { title: "Ziel Etappe 15", icon: end}).addTo(map);	
+        // WMTS-Layer Auswahl hinzufügen
+        var layerControl = L.control.layers({
+            "basemap.at - STANDARD": layers.geolandbasemap,
+            "basemap.at - GRAU": layers.bmapgrau,
+            "basemap.at - OVERLAY": layers.bmapoverlay,
+            "basemap.at - HIGH-DPI": layers.bmaphidpi,
+            "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
+            "OpenStreetMap": layers.osm,
+			 },{
+            "Adlerweg Etappe 15" : gpxTrack
+        }).addTo(map);
+
+	
 
     </script>
 <h4><a href="https://github.com/joschef">Autor: Joschua Forster</a></h4>
