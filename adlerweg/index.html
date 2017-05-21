@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <title>basemap.at mit leaflet-hash Plugin</title>
+    <title>Adlerweg Etappe 15</title>
 
     <link rel="stylesheet" href="js/leaflet/leaflet.css" />
 	<link rel="stylesheet" href="js/leaflet-elevation/leaflet.elevation-0.0.4.css" />
+
     <script src="js/leaflet/leaflet.js"></script>
+	<script src="js/leaflet-omnivore/leaflet-omnivore.js"></script>
     <script src="js/leaflet-hash/leaflet-hash.js"></script>
 	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script>
 	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -17,8 +19,8 @@
 	
     <style>
         body {
-            padding: 0px;
-            margin: 0px;
+            padding: 15px;
+            margin: 15px;
         }
         html, body, #map {
             height: 600px;
@@ -28,9 +30,12 @@
 </head>
 
 <body>
-	<h3>Adlerweg-Etappe 15: Solsteinhaus – Leutasch</h3>
-    <div id="map"></div>
-
+	<h2>Adlerweg-Etappe 15: Solsteinhaus – Leutasch</h2>
+    <p>Mitten durchs Karwendel führt diese Etappe und verläuft über die Eppzirler Scharte in das Leutaschtal und weiter zu den 24 Weilern der Gemeinde Leutasch. Dabei werden Almgebiete, Mischwälder und die Gießenbachklamm durchquert.</p>
+	<div id="map"></div>
+	
+	
+	
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
         var layers = {
@@ -76,13 +81,13 @@
 
 		 // Höhenprofil control hinzufügen
         var profileControl = L.control.elevation({
-            position : 'bottomleft',
-            theme : 'steelblue-theme'
+            position : 'bottomright',
+            theme : 'purple-theme'
         });
         profileControl.addTo(map);
 
         // GPX Track laden
-        gpxTrack = omnivore.gpx('gpx/AdlerwegEtappe15.gpx').addTo(map);
+        gpxTrack = omnivore.gpx('data/AdlerwegEtappe15.gpx').addTo(map);
 		
         // nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
         gpxTrack.on('ready', function () {
@@ -118,35 +123,38 @@
             "basemap.at - HIGH-DPI": layers.bmaphidpi,
             "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
             "OpenStreetMap": layers.osm,
+			 },{
+            "Adlerweg Etappe 15" : gpxTrack
         }).addTo(map);
 
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		
 
-		var huts = [
-			L.marker([47.30805, 11.28811], { title: "Solsteinhaus", icon: L.icon( {iconUrl: 'icons/hut.png'} )} ),
-			L.marker([47.33112, 11.26743], { title: "Eppzirleralm", icon: L.icon( {iconUrl: 'icons/hut.png'} )} )
-		
-		];
-		
-		var hutsLayer = L.featureGroup();
-		for (var i=0; i<huts.length; i++) {
-			hutsLayer.addLayer(huts[i]);
-		}
-		//hutsLayer.addTo(map);
-		map.on("zoomend", function() {
-			if (map.getZoom() >= 15) {
-				map.addLayer(hutsLayer);
-			} else {
-				map.removeLayer(hutsLayer);
-			}
-			
+		var huts = L.icon({
+			iconUrl: 'icons/hut.png',
+			iconAnchor: [16, 37]		
 		});
+		L.featureGroup([
+			L.marker ([47.30805, 11.28811], { title: "Solsteinhaus", icon: huts } ),
+			L.marker ([47.33112, 11.26743], { title: "Eppzirleralm", icon: huts} )
+		]).addTo(map);
 		
-		
-    </script>
 
+		var start = L.icon({
+			iconUrl: 'icons/hiking.png',
+			iconAnchor: [16, 37]
+		});
+		L.marker([47.30805210, 11.28814900], { title: "Start Etappe 15", icon: start}).addTo(map);
+		
+		var end = L.icon({
+			iconUrl: 'icons/finish.png',
+			iconAnchor: [16, 37]
+		});
+		L.marker([47.36996990, 11.14378990], { title: "Ziel Etappe 15", icon: end}).addTo(map);		
+
+    </script>
+<h4><a href="https://github.com/joschef">Autor: Joschua Forster</a></h4>
 </body>
 
 </html>
