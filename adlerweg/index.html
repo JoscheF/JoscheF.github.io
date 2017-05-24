@@ -147,6 +147,7 @@
 				map.fitBounds(gpxTrack.getBounds());
 
 				// Höhenprofil erzeugen und Koordinaten der Punkte holen
+				profileControl.clear();
 				gpxTrack.eachLayer(function (layer) {
 					profileControl.addData(layer.feature);
 					
