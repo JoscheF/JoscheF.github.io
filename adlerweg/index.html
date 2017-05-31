@@ -16,6 +16,7 @@
 	<script src="js/leaflet-elevation/leaflet.elevation-0.0.4.min.js"></script>
 	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+	<script src="etappeninfo.js"></script>
 	
     <style>
         body {
@@ -30,8 +31,9 @@
 </head>
 
 <body>
-	<h2>Adlerweg-Etappe 15: Solsteinhaus – Leutasch</h2>
-    <p>Mitten durchs Karwendel führt diese Etappe und verläuft über die Eppzirler Scharte in das Leutaschtal und weiter zu den 24 Weilern der Gemeinde Leutasch. Dabei werden Almgebiete, Mischwälder und die Gießenbachklamm durchquert.</p>
+	<h2>Titel: <div id="Titel"></div></h2>
+	
+    
 	
 	<div id="map"></div>
 	<select id="etappen">
@@ -70,9 +72,18 @@
 		<option  value ="AdlerwegEtappeO9.gpx">Adlerweg Etappe O9</option>
 	</select>
 	
+	<h4>Kurztext</h4>
+	<div id="Kurztext"></div>
+	<h4>Streckenbeschreibung</h4>
+	<div id="Streckenbeschreibung"></div>
+	
+	
 	
 	
     <script>
+		
+		
+		
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
         var layers = {
             geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
@@ -123,8 +134,16 @@
         profileControl.addTo(map);
 		
 		function loadTrack(track) {
-			// GPX Track laden
+			// GPX Track 
+			console.log("etappeninfo: ", window.ETAPPENINFO);
+			
+			
 			gpxTrack = omnivore.gpx('data/' + track).addTo(map);
+			
+			
+			document.getElementById("Titel").innerHTML = window.ETAPPENINFO[track].Titel;
+			document.getElementById("Kurztext").innerHTML = window.ETAPPENINFO[track].Kurztext;
+			document.getElementById("Streckenbeschreibung").innerHTML = window.ETAPPENINFO[track].Streckenbeschreibung;
 			
 			// nach erfolgreichem Laden Popup hinzufügen, Ausschnitt setzen und Höhenprofil erzeugen
 			gpxTrack.on('ready', function () {
@@ -251,8 +270,8 @@
 	var etappenSelektor = document.getElementById ("etappen");
 		//console.log("Selektor", etappenSelektor);
 		etappenSelektor.onchange = function (evt) {
-		console.log("Change event: ", evt);
-		console.log("GPX Track laden: ", etappenSelektor[etappenSelektor.selectedIndex].value);
+		//console.log("Change event: ", evt);
+		//console.log("GPX Track laden: ", etappenSelektor[etappenSelektor.selectedIndex].value);
 		loadTrack(etappenSelektor[etappenSelektor.selectedIndex].value);
 		}
 		loadTrack("AdlerwegEtappe01.gpx");
